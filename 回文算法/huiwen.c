@@ -14,9 +14,9 @@ int main()
 		}
 		if(i<j) 
 		{
-			printf("不是回文\n");
+			printf("涓嶆槸鍥炴枃\n");
 		}
-		else printf("是回文\n");
+		else printf("鏄洖鏂嘰n");
 
 	}
 
