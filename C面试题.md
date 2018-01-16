@@ -9,6 +9,7 @@
 8. [面试题8](http://blog.csdn.net/yishengzhiai005/article/details/50733242)
 9. [面试题9](http://blog.csdn.net/myblog_dwh/article/details/26601093)
 10. [面试题10](http://blog.csdn.net/jxnu_xiaobing/article/details/12561141)
+11. [linux驱动面试题整理](http://blog.csdn.net/lhhero701/article/details/51171948)
 
 11. `Sizeof与Strlen的区别与联系`
 [Sizeof与Strlen的区别与联系](http://www.cnblogs.com/carekee/articles/1630789.html)
