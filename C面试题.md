@@ -10,8 +10,23 @@
 9. [面试题9](http://blog.csdn.net/myblog_dwh/article/details/26601093)
 10. [面试题10](http://blog.csdn.net/jxnu_xiaobing/article/details/12561141)
 11. [linux驱动面试题整理](http://blog.csdn.net/lhhero701/article/details/51171948)
+12. [常见linux驱动面试题](http://blog.csdn.net/qq_31505483/article/details/75012661)
+13. [嵌入式软件工程师面试题](http://blog.csdn.net/u012478275/article/details/51546465)
+14. [Linux设备树语法详解](http://www.cnblogs.com/xiaojiang1025/p/6131381.html)
+15. [Linux驱动开发](http://www.cnblogs.com/xiaojiang1025/category/918665.html)
+16. [从零开始写设备树DTS](http://blog.csdn.net/woshidahuaidan2011/article/details/52948732)
 
-11. `Sizeof与Strlen的区别与联系`
+13. 
+```
+笔试的时候大多是基础为主,如果说要找重点的话
+1.<C/C++高质量编程>最后的那张卷子
+2.<The C programming language>里的课后题和例程.
+3.struct的大小(注意编译器,操作系统,硬件体系,最好自己实验出结果).
+4.冒泡排序,快速排序,shell排序,折半查找,约瑟夫环,链表的操作.
+5.google搜<C语言面试题>(要知道,一般的面试题也是这样出来的,呵呵)
+```
+
+## `Sizeof与Strlen的区别与联系`
 [Sizeof与Strlen的区别与联系](http://www.cnblogs.com/carekee/articles/1630789.html)
 ```
 一、sizeof
