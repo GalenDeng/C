@@ -15,8 +15,9 @@
 14. [Linux设备树语法详解](http://www.cnblogs.com/xiaojiang1025/p/6131381.html)
 15. [Linux驱动开发](http://www.cnblogs.com/xiaojiang1025/category/918665.html)
 16. [从零开始写设备树DTS](http://blog.csdn.net/woshidahuaidan2011/article/details/52948732)
-
-13. 
+17. [C 语言运算符优先级（记忆口诀）](http://blog.csdn.net/u013630349/article/details/47444939)
+18. [C语言运算符优先级和口诀](http://www.cnblogs.com/zhanglong0426/archive/2010/10/06/1844700.html)
+ 
 ```
 笔试的时候大多是基础为主,如果说要找重点的话
 1.<C/C++高质量编程>最后的那张卷子
