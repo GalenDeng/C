@@ -50,3 +50,49 @@
     输出结果为：5 and 10
     点评：sizeof返回定义arr数组时，编译器为其分配的数组空间大小，不关心里面存了多少数据。strlen只关心存储的数据内容，不关心空间的大小和类型
 ```
+## 指针
+```
+#include <stdio.h>
+
+void main()
+{
+	int b=3;
+
+	int arr[]={6,7,8,9,10};
+
+	int *ptr = arr;
+
+	*(ptr++) += 123;
+
+	printf("%d,%d,%d\n",*(ptr-1),*ptr,*(++ptr));
+}
+```
+```
+打印结果:
+7,8,8
+Press any key to continue
+```
+## `*(ptr++) 和 *ptr++ 是一样的` --- `都是最后才得到 ptr = ptr + 1`
+```
+#include <stdio.h>
+void main() 
+{ 
+char *ptr = "csdn";  
+printf("%c\n",*ptr++);
+}
+```
+```
+#include <stdio.h>
+void main() 
+{ 
+char *ptr = "csdn"; 
+printf("%c\n",*(ptr++)); 
+}
+```
+```
+打印结果:
+c
+Press any key to continue
+```
+## C中的printf计算参数是从右到左压栈的
+* 例子：见程序员面试宝典的 5.2.2 P34
