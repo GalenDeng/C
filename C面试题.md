@@ -165,3 +165,33 @@ VC6.0的结果:
 * 一旦解析完圆括号里面的所有的东西，就跳出圆括号，重复这个过程，直到整个声明解析完毕。
 * 应该是从未定义的标识符开始阅读，而不是从括号读起
 * 具体分析见 《C和C++程序员面试秘笈》 P58
+
+## `指针赋值`
+```
+#include <stdio.h>
+
+int main(void)
+{
+	char a[]= "hello,world";
+	char *ptr = a;
+
+	printf("%c\n", *(ptr+4));
+	printf("%c\n", ptr[4]);
+	printf("%c\n", a[4]);
+	printf("%c\n", *(a+4));
+
+	*(ptr+4)+=1;
+	printf("%s\n",a);
+
+	return 0;
+}
+```
+```
+程序的效果：
+o
+o
+o
+o
+hellp,world
+Press any key to continue
+```
