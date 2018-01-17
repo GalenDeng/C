@@ -139,3 +139,29 @@ int main()
 3.000000,2.000000
 Press any key to continue
 ```
+## `宏定义`
+```
+#include <stdio.h>
+#define SUB(x,y) ((x)-(y))
+#define ACCESS_BEFORE(element,offset,value) *SUB(&element,offset) =value
+
+int main()
+{
+	int i; int array[10] = {1,2,3,4,5,6,7,8,9,10};
+	ACCESS_BEFORE(array[5],4,6);
+	for( i=0; i<10; ++i)
+	{
+		printf("%d",array[i]);
+	}
+	return (0);
+}
+```
+```
+VC6.0的结果:
+16345678910Press any key to continue
+```
+## 解读复杂指针声明的方法
+* 使用右左法则：首先从最里面的圆括号看起，然后往右看，再往左看，每当遇到圆括号时,应该掉转阅读方向。
+* 一旦解析完圆括号里面的所有的东西，就跳出圆括号，重复这个过程，直到整个声明解析完毕。
+* 应该是从未定义的标识符开始阅读，而不是从括号读起
+* 具体分析见 《C和C++程序员面试秘笈》 P58
