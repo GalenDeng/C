@@ -97,3 +97,45 @@ Press any key to continue
 ```
 ## C中的printf计算参数是从右到左压栈的
 * 例子：见程序员面试宝典的 5.2.2 P34
+
+## `类型强制转换与运算符的优先级`
+```
+#include <stdio.h>
+int main()
+{
+	unsigned char a = 0xA5;
+	unsigned char b = ~a>>4+1;  // 参考该文件的运算符的优先级的记忆口诀(在链接中)
+	printf("b=%d\n",b);         // b = 250
+	return 0;
+}
+```
+## `单目/双目/三目运算符的定义`
+```
+* 单目运算符是指运算所需变量为一个的运算符，又叫一元运算符，其中有逻辑非运算符:!、按位取反运算符:~、自增自减运算符:++， --等
+* 运算所需变量为两个的运算符叫做双目运算符，例如+，-，*，/，%，<，>，>=，<=，==，!=，<<，>>，&，^，|，&&，||，=
+* 运算所需变量为三个的运算符叫做三目运算符，只有条件表达式【?:】
+```
+## `有2个数据，写一个交换数据的宏`
+```
+#include <stdio.h>
+#include <string.h>
+
+#define swap(a,b) \
+{ char tempBuf[10]; memcpy(tempBuf,&a,sizeof(a)); \
+memcpy(&a,&b,sizeof(b)); memcpy(&b,tempBuf,sizeof(a));}
+
+int main()
+{
+	double a=2,b=3;
+
+	swap(a,b);
+
+	printf("%1f,%1f\n",a,b);
+	return 0;
+}
+```
+```
+* 得出结果
+3.000000,2.000000
+Press any key to continue
+```
