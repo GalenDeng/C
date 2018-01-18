@@ -195,3 +195,201 @@ o
 hellp,world
 Press any key to continue
 ```
+## `数据对齐 -- sizeof`
+* 程序员面试宝典 P52
+* char : 1字节; short : 2字节; int ；4字节; float : 4字节; long : 4字节;  double : 8字节
+
+## `sizeof 和 strlen`
+* strlen()的参数只能是 char* , 且必须是以“\0”结尾的
+* char* ss="1234"; // strlen(ss) = 4
+* int ss[4] ;	   // strlen(ss) 错误
+* 详细介绍 : 程序员面试宝典 P57
+* 数组作为参数传给函数时传递的是指针而不是数组,传递的是数组的首地址,
+* 如 fun(char [8])、 fun(char [])都等价于fun(char *)。在C++ 里传
+* 递数组永远都是传递指向数组首元素的指针,编译器不知道数组的大小
+
+## `sizeof的意义`
+```
+#include <stdio.h>
+int main(void)
+{
+	int a =8;
+	printf("%d\n",a);
+	printf("%d\n",sizeof(a));
+	printf("%d\n",sizeof(a = 6));		// sizeof的括号内的内容在编译过程中是不被编译的,而是被替代类型
+										// 在编译过程中,不管a的值是什么，只是被替换成类型sizeof(int),
+										// 而 a= 6 是不被编译的,所以 a 还是等于 8 , 是不变的。
+	sizeof(a =6);
+	printf("%d\n",a);
+}
+```
+```
+* VC6.0的执行结果:
+8
+4
+4
+8
+Press any key to continue
+```
+## `数组作为参数传给函数时传递的是指针而不是数组,传递的是数组的首地址`
+* fun(char a[8]) , fun(char a[]) 都等价于 fun(char *)
+```
+#include <stdio.h>
+
+int test(char var[])
+{
+	return sizeof(var);
+}
+int main(void)
+{
+	char var[10];
+	int a;
+	a = test(var);
+	printf("%d\n",a);
+}
+```
+```
+* VC6.0的执行结果:
+4
+Press any key to continue
+```
+## `空类占内存空间为 1 ;单一继承和多重继承的空类占内存空间为 1 ; 虚继承的空类占内存空间为 4(涉及虚指针)`
+## `传递动态内存 --- 函数参数传递、值传递、指针传递(地址传递)、引用传递` 
+* 程序员面试宝典 P67
+
+## `动态内存`
+```
+#include <iostream.h>
+#include <stdio.h>
+void GetMemory(char *p,int num)				// 这里的 p 为str的一个副本, 指向 NULL(即不指向任何位置的内存)
+{
+	p = (char *)malloc(sizeof(char)*num);	// 申请新的内存,即这里改变副本p的指向位置，这里p的指向从NULL指向申请的新											// 的内存位置,即现在str和p的指向不一样了,这里申请的内存没有进行释放,
+											// 会一直占用内存空间, 造成内存的泄漏
+}
+
+int main()
+{
+	char *str = NULL;
+
+	GetMemory(str,100);
+	strcpy(str,"hello");					// 因为str没有指向任何的内存空间,这里执行字符串的赋值会导致程序崩溃
+	return 0;
+}
+```
+* 如果一定要用指针参数取申请内存,那么应该采用指向指针的指针(char **p),传str的地址给函数GetMemory
+```
+#include <iostream>
+using namespace std;
+void GetMemory(char **p,int num)
+{
+	*p = (char *)malloc(sizeof(char)*num);
+}
+
+int main()
+{
+	char *str = NULL;
+
+	GetMemory(&str,100);
+	strcpy(str,"hello");
+	cout << *str << endl;		// 字符串的某一字符的值
+	cout << str  << endl;		// 字符串的值
+	cout << &str << endl;		// 字符串的地址
+	return 0;
+}
+```
+```
+* VC6.0调试结果：
+h
+hello
+0019FF3C
+Press any key to continue
+```
+## 函数返回值来传递动态内存
+```
+#include <iostream>
+using namespace std;
+char *GetMemory(char *p,int num)			// 函数返回值传递动态内存
+{
+	p = (char *)malloc(sizeof(char)*num);
+	return p;
+}
+
+int main()
+{
+	char *str = NULL;
+
+	str= GetMemory(str,100);
+	strcpy(str,"hello");
+	cout << *str << endl;
+	cout << str  << endl;
+	cout << &str << endl;
+	return 0;
+}
+```
+```
+* VC6.0调试结果：
+h
+hello
+0019FF3C
+Press any key to continue
+```
+##  整型变量传值
+```
+#include <iostream>
+using namespace std;
+
+void Getmemory(int *z)
+{
+	*z = 5;
+}
+
+int main()
+{
+	int v;
+	Getmemory(&v);
+	cout << v << endl;
+	return 0;
+}
+```
+```
+* VC6.0调试结果：
+5
+Press any key to continue
+```
+## `局部数组:内存中的栈;指针变量是全局变量:内存中的全局区域(静态存储区);字符串常量:只读数据段`
+* 1. `字符串常量`
+```
+char *c = "hello world ";	// &c ：保存在静态存储区  "hello world":保存在只读数据段中(不允许修改)
+*c = 't';	// 因为指针c直接指向只读数据段中的"hello world"的地址,尝试修改首地址的值为't',当然会失败(编译器报错)
+```
+* 2. `局部变量` 
+```
+char c[] = "hello world";	// char c[] : 字符数组，属于局部数组,保存在内存中的栈中,
+							// 这里就是从只读数据段中copy一份"hello world"保存在局部数组相对应的栈地址中
+c[0] = 't';					// 改变栈中的局部数组第一个元素的值为't'
+```
+3. `static`
+* 不加 static的时候,函数strA在调用完毕之后,str这个局部变量就释放了,栈的临时空间被重置,所以返回的结果是不确定的
+* 且不安全的,随时都有被收回的可能，添加static关键字后,改变了str的存储方式,在函数调用完毕之后,值不变
+```
+const char* strA()			// 添加 const , 定义函数的返回值不能修改
+{
+	static char str[] = "hello world";	// 添加 static关键字,将局部数组变为静态局部数组,存储方式从 栈 => 静态存储区
+	return str;
+}
+```
+4. `代码实验`
+* 代码
+```
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	char *c = "hello world";
+	*c = 't';					// 不能尝试去改变字符串常量(只读数据段)
+	cout << c << endl;
+	return 0;
+}
+```
+* 实现结果 : 程序崩溃
