@@ -704,5 +704,5 @@ List list = new ArrayList();
 已备你以后向里放你想放的东西～～
 ```
 ## `创建单链表`
-* [创建单链表code]()
-* [调试结果]()
+* [创建单链表code](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list.cpp)
+* [调试结果](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list%E8%B0%83%E8%AF%95%E7%BB%93%E6%9E%9C)
