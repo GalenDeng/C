@@ -495,3 +495,199 @@ int func( A* const this, int p);
   A::func(&a,10);
 ```
 * this是个指向对象的"常指针"
+## `float、double、int的存储方式`
+```
+#include <iostream>
+using namespace std;
+int main()
+{
+
+	double a=12.3;
+	a=(int)a;
+	printf("%f\n",5);			// 输出 0.000000  在printf中float会自动转换为double,因此从stack中读8个字节
+	printf("%d\n",5.01);		// 输出一个很大的数
+	cout << a << endl;			// 12
+	return 0;
+}
+
+答：a是double型，值为12
+double a = 12.3; 说明a为double型
+a = (int)a; 先把a显式强制转换成int，再隐式转换成double，中间有精度丢失
+
+* VC6.0的结果是:
+0.000000
+1889785610
+12
+Press any key to continue
+```
+## `十进制小数转换二进制的问题`
+[转帖：float型和double型数据的存储方式](https://www.cnblogs.com/fly-height/articles/2340396.html)
+[C中double到int的转换、四舍五入](http://blog.csdn.net/lin200753/article/details/27952897)
+```
+无论是单精度还是双精度在存储中都分为三个部分：
+
+符号位(Sign) : 0代表正，1代表为负
+指数位（Exponent）:用于存储科学计数法中的指数数据，并且采用移位存储
+尾数部分（Mantissa）：尾数部分
+
+120.5用二进制表示为：1110110.1用二进制的科学计数法表示1000.01可以表示为1.00001*clip_image002[2],1110110.1可以表示为1.1101101*clip_image002[3],任何一个数都的科学计数法表示都为1.xxx*clip_image002[1],尾数部分就可以表示为xxxx,第一位都是1嘛，干嘛还要表示呀？可以将小数点前面的1省略，所以23bit的尾数部分，可以表示的精度却变成了24bit，道理就是在这里，那24bit能精确到小数点后几位呢，我们知道9的二进制表示为1001，所以4bit能精确十进制中的1位小数点，24bit就能使float能精确到小数点后6位，而对于指数部分，因为指数可正可负，8位的指数位能表示的指数范围就应该为:-127-128了，所以指数部分的存储采用移位存储，存储的数据为元数据 127，下面就看看8.25和120.5在内存中真正的存储方式
+```
+```
+整数和小数分别转换。
+整数除以2，商继续除以2，得到0为止，将余数逆序排列。
+22 / 2  11 余0
+11/2     5  余 1
+5 /2      2  余 1
+2 /2      1  余 0
+1 /2      0  余 1
+所以22的二进制是10110
+小数乘以2，取整，小数部分继续乘以2，取整，得到小数部分0为止，将整数顺序排列。
+0.8125x2=1.625 取整1,小数部分是0.625
+0.625x2=1.25 取整1,小数部分是0.25
+0.25x2=0.5 取整0,小数部分是0.5
+0.5x2=1.0 取整1,小数部分是0，结束
+所以0.8125的二进制是0.1101
+十进制22.8125等于二进制10110.1101
+```
+## `(int)"a"`
+```
+int i = (int)"a";		// 此处的意思是把把这个字符串首字母在常量区的内存地址转化为int类型, 再赋值给i
+cout << i << endl;		// 得出 4648988这个int内存地址
+
+char *p = "a";
+int i = (int)p;			// 把p的值(即“a”的常量区内存地址)转化为int型再赋值给i
+cout << i << endl;		// 得出 4648988这个int内存地址
+```
+## `C++类型转换`
+* 转换符: static_cast const_cast dynamic_cast reinterpret_cast
+* static的限制: 不能把struct转换为int、不能把double转换为指针类型、不能去除const属性
+* reinterpret: 通常为操作数的位模式提供底层的重新解释
+```
+int firstNumber,secondNumber;
+double result = static_cast(double)(firstNumber)/secondNumber;
+```
+## `unsigned short int`
+* 在 unsigned short int 中无符号的 -1的结果就是 65535
+```
+#include <iostream>
+using namespace std;
+int main()
+{
+	unsigned short int i=0;
+	int j=8,p;
+	p = j << 1;
+	i = i -1;
+	cout << p << endl;
+	cout << i << endl;			// 2^16-1
+	return 0;
+}
+* VC6.0的结果:
+16
+65535
+```
+## `联合体内的成员共享内存空间 --- 内存中的数据排列问题`
+```
+#include <iostream>
+using namespace std;
+
+union {
+	unsigned char a;
+	unsigned int i;
+}u;
+
+int main()
+{
+
+	u.i=0xf0f1f2f3;
+	cout << hex << u.i << endl;			// 16进制显示
+	cout << hex << int(u.a)  << endl;	// u.a取低字节的一个字节
+	return 0;
+}
+
+* VC6.0的结果:
+f0f1f2f3
+f3
+Press any key to continue
+```
+## `在某工程中,要求设置一绝对地址为0x67a9的整型变量的值为0xaa66`
+```
+* 法一: 面试时推荐这种写法
+int *ptr;
+ptr = (int *)0x67a9;	// 0x67a9就是一个地址
+*ptr = 0xaa66;
+
+* 法二:
+*((int * const)0x67a9) = 0xaa66;
+```
+## `(char *)malloc(0) 的理解`
+```
+ptr = (char *)malloc(0)		
+// malloc(0)是指分配内存大小为零(但是因为内存大小为0,所以不能进行写操作,
+//因为内存给它存放),但是在堆中准备好了相应的内存地址
+char   *ptr;
+if ((ptr   =   (char   *)malloc(0))   ==   NULL)   
+puts( "Got   a   null   pointer "); 
+else 
+puts( "Got   a   valid   pointer "); 
+上面程序在VC6.0下输出结果是：Got   a   valid   pointer 
+
+当使用malloc后，只有在没有足够内存的情况下会返回NULL，或是出现异常报告。 
+
+malloc(0)，系统就已经帮你准备好了堆中的使用起始地址（不会为NULL)。但是你不能对该地址进行写操作（不是不允许），如果写了话，当调用free(ptr)就会产生异常报告（地址受损）。
+
+NULL一般预定义为   (void   *)0,指向0地址。malloc是在程序堆栈上分配空间，不会是0地址 
+
+NULL是不指向任何实体 
+malloc(0)也是一种存在不是NULL
+```
+## `ASCII码`
+```
+* a - z : 97 - 122
+* A - Z : 65 - 90
+```
+```
+#include <iostream>
+using namespace std;
+
+typedef struct bitstruct {
+	int b1:5;
+	int :2;			// 中间 2位
+	int b2:2;
+}bitstruct;			// 该结构体共9位
+
+int main()
+{
+
+	bitstruct b;
+	memcpy(&b,"EMC EXAMINATION",sizeof(b));	// sizeof(b) = 4  , 因为结构体b的成员变量是int型，且只有9位，未填充完一											// 个int(4字节),未填充的位补0
+	printf("%d,%d\n",b.b1,b.b2);
+	return 0;
+}
+
+* b2(10)的最高位为1,表示为负数,其原码要进行取反加1才能得到,这里为 -2
+
+* VC6.0调试结果:
+5,-2
+Press any key to continue
+```
+## `原码, 反码, 补码的基础概念和计算方法`
+[原码, 反码, 补码的基础概念](http://www.cnblogs.com/zhangziqiu/archive/2011/03/30/ComputerCode.html)
+```
+原码就是符号位加上真值的绝对值, 即用第一位表示符号, 其余位表示值. 比如如果是8位二进制:
+[+1]原 = 0000 0001
+[-1]原 = 1000 0001
+
+反码的表示方法是:
+正数的反码是其本身
+负数的反码是在其原码的基础上, 符号位不变，其余各个位取反.
+[+1] = [00000001]原 = [00000001]反
+[-1] = [10000001]原 = [11111110]反
+可见如果一个反码表示的是负数, 人脑无法直观的看出来它的数值. 通常要将其转换成原码再计算
+
+补码的表示方法是:
+正数的补码就是其本身
+负数的补码是在其原码的基础上, 符号位不变, 其余各位取反, 最后+1. (即在反码的基础上+1)
+[+1] = [00000001]原 = [00000001]反 = [00000001]补
+[-1] = [10000001]原 = [11111110]反 = [11111111]补
+对于负数, 补码表示方式也是人脑无法直观看出其数值的. 通常也需要转换成原码在计算其数值
+```
