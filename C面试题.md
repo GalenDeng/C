@@ -703,6 +703,147 @@ List list = new ArrayList();
 打个比方，你想要存放东西，那么首先你得有仓库吧，而你自己没有，你就得先申请一个空的仓库
 已备你以后向里放你想放的东西～～
 ```
+## `-i--`
+* -i--就是先进行i--运算，然后再取其负值
+* --与负号处于同一优先级，而结合方向是从右到左，所以是先进行i--运算，再取负号。
+* i--就是把i自减1，但是它的返回值却是i，这就是i--与--i的区别，--i的返回值就是i-1了
+```
+#include <stdio.h>
+
+int main(void)
+{
+	int i=8;
+
+	printf("%d\n",++i);
+	printf("%d\n",--i);
+	printf("%d\n",i++);
+	printf("%d\n",i--);
+	printf("%d\n",-i++);
+	printf("%d\n",-i--);
+	printf("%d\n",-(++i));
+	printf("%d\n",-(--i));
+	printf("------\n");
+
+}
+
+* VC6.0调试结果:
+9
+8
+8
+9
+-8
+-9
+-9
+-8
+------
+Press any key to continue
+```
+## `int与uint类型之间转换过程中值的变化`
+* [int与uint类型之间转换过程中值的变化](http://blog.csdn.net/xiaokui_wingfly/article/details/8528442)
+* 计算机中存储数据都是用补码来存储
+```
+int类型的数据转化为uint类型：
+因为int是带符号的类型，当int是正数时，int类型数据转化为uint时不发生改变。
+当int是负数时，int类型数据转化为uint类型时，值就要发生变化。
+但转化的过程并不是去掉前面的负号，例如
+
+int a=-1;  
+uint b=(uint)a;  
+
+这时b的结果并不是1；而是4294967295；
+我们知道在计算机中存储数据都是用补码来存储的，int的大小是4个字节，也就是32位，并且第一位是符号位；
+而uint的大小同样是4个字节，32位，但没有符号位。
+所当int a=-1;在计算机中存储的是补码：1111 1111 1111 1111;第一位是符号位。
+执行uint b=(uint)a;转化为uint类型时，存储的依然是补码：1111 1111 1111 1111;没有符号位。
+这时值就变成了4294967295
+```
+```
+#include <stdio.h>
+
+char getChar(int x,int y)
+{
+	char c;
+	unsigned int a =x;
+	(a+y > 10)?(c=1):(c=2);
+	return c;
+}
+
+int main(void)
+{
+	char c1 = getChar(7,4);
+	char c2 = getChar(7,3);
+	char c3 = getChar(7,-7);	// -7 => 二进制 => 补码(源码[符号位不变]取反加1) => +7(变为二进制) => 刚好溢出 => 0 
+	char c4 = getChar(7,-8);
+
+	printf("c1 = %d\n",c1);
+	printf("c2 = %d\n",c2);
+	printf("c3 = %d\n",c3);
+	printf("c4 = %d\n",c4);
+}
+
+* VC6.0调试结果:
+c1 = 1
+c2 = 2
+c3 = 2
+c4 = 1
+Press any key to continue
+```
+## `宏定义`
+* 宏定义的执行是在编译之前的,即预处理的阶段[重点]
+* 宏定义的参数记得用()括起来
+* #define STR(s) #s		// # : 把宏参数变为一个字符串
+* #define CONS(a,b) (int)(a##e##b)	// ## ：把参数a,b贴合在一起 
+* CONS(2,3)		// 2 * 10^3 = 2000
+```
+#include <stdio.h> //  <> : 该文件是一个工程或标准头文件，查找的时候先查找预定义目录
+
+#define SQR(x) (x*x) 	// 这里的 x*x = b+2*b+2=b+2b+2=3b+2 => 突显宏参数一定要加()的重要性
+
+int main(void)
+{
+	int a,b=3;
+	// 因为 SQR是一个宏,作用为字符替换,宏处理在编译前,所以宏中的x = b +2 ,但b没有值,编译后才会出现 b =3
+	a = SQR(b+2);		
+	printf("%d\n",a);
+	return 0;
+}
+
+* VC6.0调试结果:
+11
+Press any key to continue
+```
+## `宏定义得到字的高位和低位字节`
+* 字 ： 两个字节 === unsigned short
+```
+//#include <stdio.h> //  <> : 该文件是一个工程或标准头文件，查找的时候先查找预定义目录
+#include <iostream>
+#define WORD_LO(xxx) ((unsigned char) ((unsigned short)(xxx) & 0xff))
+#define WORD_HI(xxx) ((unsigned char) ((unsigned short)(xxx) >> 8))
+int main(void)
+{
+	printf("该字的高字节为: \n");
+	printf("%c\n",WORD_HI(16706));	// 16706 === 0x4142 === AB
+	printf("该字的低字节为: \n");
+	printf("%c\n",WORD_LO(16706));
+
+	return 0;
+}
+
+* VC6.0的调试结果:
+
+该字的高字节为:
+A
+该字的低字节为:
+B
+Press any key to continue
+```
+## `虚函数占用内存空间`
+```
+普通函数不占用内存,只要有虚函数,就会占用一个指针大小的内存,原因是系统多用了一个指针
+来维护这个类的虚函数表,并且注意这个虚函数无论含有多少项(类中含有多少个虚函数),都不会
+再影响类的大小
+```
+
 ## `创建单链表`
 * [创建单链表code](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list.cpp)
 * [调试结果](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list%E8%B0%83%E8%AF%95%E7%BB%93%E6%9E%9C)
