@@ -843,7 +843,59 @@ Press any key to continue
 来维护这个类的虚函数表,并且注意这个虚函数无论含有多少项(类中含有多少个虚函数),都不会
 再影响类的大小
 ```
+## `#pragma pack`
+* #pragma pack(1) 	// 对齐方式 : 1字节 
 
+## `交换两个字符串`
+```
+//法一:
+#include <iostream> //  <> : 该文件是一个工程或标准头文件，查找的时候先查找预定义目录
+void swap(char* &p1, char* &p2)	//这里是指针引用,所以传入函数的是实参
+{	
+// 若改为swap(char* p1, char* p2) 则指针的交换只在swap函数体内有效,对实际的(主函数的)p1,p2没影响						// 实际上的 p1 p2所指向的字符串是放在常量区,这里的函数参数 char *p1,char *p2只是一个临时分配的,不是实参
+// 因为他们的地址不是主函数中两指针本身的地址,是新开辟的
+// 总结: 要确保传递的参数是实参	
+	char *temp;
+	temp=p1;
+	p1=p2;
+	p2=p1;
+}
+
+int main(void)
+{
+	char *p1="abc";
+	char *p2="ABC";
+	printf("%s\n",p1);
+	printf("%s\n",p2);
+	swap(p1,p2);
+	printf("%s\n",p1);
+	printf("%s\n",p2);
+	return 0;
+}
+
+//法二:
+#include <iostream> //  <> : 该文件是一个工程或标准头文件，查找的时候先查找预定义目录
+
+void swap(char **p1,char **p2)	// 传入的是主函数的两指针的实际内存地址,为实参
+{
+	char *temp;
+	temp = *p1;
+	*p1 = *p2;
+	*p2 = temp;
+}
+
+int main(void)
+{
+	char *p1="abc";
+	char *p2="ABC";
+	printf("%s\n",p1);
+	printf("%s\n",p2);
+	swap(&p1,&p2);		// 传入函数参数的是p1、p2本身的内存地址
+	printf("%s\n",p1);
+	printf("%s\n",p2);
+	return 0;
+}
+```
 ## `创建单链表`
 * [创建单链表code](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list.cpp)
 * [调试结果](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list%E8%B0%83%E8%AF%95%E7%BB%93%E6%9E%9C)
