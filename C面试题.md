@@ -896,6 +896,39 @@ int main(void)
 	return 0;
 }
 ```
+## `指针数组和数组指针的理解`
+## 图解
+![图解](https://github.com/GalenDeng/C/blob/master/%E6%8C%87%E9%92%88/%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84%E5%92%8C%E6%95%B0%E7%BB%84%E6%8C%87%E9%92%88%E7%9A%84%E7%90%86%E8%A7%A3.jpg)
+```
+#include <stdio.h>
+
+int main()
+{
+	char *str[] = {"Welcome","to","Fortemedia","Nanjing"};
+	char **p = str + 1;			// str + 1 二维数组 + 1 == str[1]
+	str[0] = (*p++) +2;
+	str[1] = *(p+1);
+	str[2] = p[1] + 3;
+	str[3] = p[0] + (str[2]-str[1]);
+
+	printf("%s\n", str[0]);
+	printf("%s\n", str[1]);
+	printf("%s\n", str[2]);
+	printf("%s\n", str[3]);
+
+	return 0;
+}
+
+* VC6.0调试结果:
+
+Nanjing
+jing
+g
+Press any key to continue
+```
+## `malloc`
+* 用C写程序用到malloc的时候要加上 <stdiuo.h> <stdlib.h> <malloc.h>
+
 ## `创建单链表`
 * [创建单链表code](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list.cpp)
 * [调试结果](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list%E8%B0%83%E8%AF%95%E7%BB%93%E6%9E%9C)
