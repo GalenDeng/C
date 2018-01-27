@@ -926,6 +926,60 @@ jing
 g
 Press any key to continue
 ```
+## `函数指针与指针函数`
+```
+#include <iostream>
+using namespace std;
+
+int max(int x,int y)
+{
+	return (x > y ? x : y);
+}
+
+int main()
+{
+	int (*p)(int,int);	// 指向函数的指针,且其返回值为int类型
+	int a;
+
+	p = &max;			// p = max 和 p = &max 的作用一样
+					    // 把函数当作一个变量,而指针指向一个变量要取其地址, 所以为: p=&max
+						// 而函数返回值为 *p
+	a = (*p)(1,2);
+	cout << a << endl;
+	return 0;
+}
+```
+## `typedef用于函数指针定义`
+```
+#include <iostream>
+using namespace std;
+typedef int (*pfun)(int x,int y);	// 定义一个函数指针,返回值为int类型,有两个int参数
+									// 可以用这种类型定义函数指针来调用相同类型的函数
+int fun(int x,int y)
+{
+	return (x > y ? x : y);
+}
+
+int main()
+{
+
+
+	int fun(int x, int y);		// 定义fun函数
+	pfun p = fun;				// 定义pfun类型的函数指针p1,并把fun函数的地址赋给p
+	pfun p1 = &fun;
+	int ret = p(2,3);			// 调用p(2,3),实现调用fun(2,3)的调用功能
+	int val = (*p1)(2,3);
+	cout << ret << endl;
+	cout << val << endl;
+	return 0;
+}
+
+* VC6.0调试结果:
+3
+3
+Press any key to continue
+```
+
 ## `malloc`
 * 用C写程序用到malloc的时候要加上 <stdiuo.h> <stdlib.h> <malloc.h>
 
