@@ -979,9 +979,32 @@ int main()
 3
 Press any key to continue
 ```
+## `printf("%f\n",5`
+```
+* printf("%f\n",5)的输出结果为什么是0.000000
+printf函数不会进行任何类型转换，它只是从内存中读出你所提供的元素的值（按照%d，%f等控制字符提示的格式）。C语言设计中，int类型一般是32bit或者16bit，而float一般是64bit，并且有可能使用科学计数保存。这点就和huhugo88所说一样，5在内存中为00000000,00000101。而且5一般都在静态区，程序的静态存储区默认是0，那么当用%f来读时，就会读64bit，也就是会读之前的很多位0，最后按照（有效数字）×（基数2)pow(指数）的方式来取数，自然结果是0 
+ 
+之所以Vc中不允许这种情况，而有些编译器就允许这么输出就是编译器设置的问题。按理说，这样访问内存是属于越界访问，应该禁止。不过只是读，伤害性不大而已
+```
 
 ## `malloc`
 * 用C写程序用到malloc的时候要加上 <stdiuo.h> <stdlib.h> <malloc.h>
+
+## `联合体的特性`
+* 联合体union的存放顺序是所有成员都从低地址开始存放,利用此特性,可以轻松获得CPU对内存采用
+* Little-endian还是Big-endian模式的读写
+```
+* 处理器为 Big-endian 返回0 ; 处理器为 Little-endian 返回1
+int checkCPU()
+{
+	union w {
+		int a;
+		char b;
+	} c;
+	c.a =1;
+	return (c.b == 1)
+}
+
 
 ## `创建单链表`
 * [创建单链表code](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list.cpp)
