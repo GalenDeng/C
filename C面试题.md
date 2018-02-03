@@ -1029,6 +1029,11 @@ main()
 	strcpy(p1,"123456");		// 1234546放在常量区,编译器可能会将它和p3所指向的"123456"优化成一个地方
 }
 ```
+* `一般来说,平均来讲获取任意一个指定值最快?`
+```
+* 一般来说,哪个需要的额外空间越多,哪个越快
+* 当遇到键-值对存储,采用Hashtable比ArrayList查找的性能高
+```
 
 ## `创建单链表`
 * [创建单链表code](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list.cpp)
