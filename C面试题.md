@@ -1042,6 +1042,32 @@ main()
 * 采用深拷贝的情况下，释放内存的时候就不会出现在浅拷贝时重复释放同一内存的错误。
 ```
 
+## `new出来的堆内存是没有被初始化的，内存中的值都是随机数`
+* `new出来的内存记得进行初始化`
+```
+* 错误写法:
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	char *str1 = "hello";
+	char *str2 = " china";
+	char *str3 = NULL;
+	// 申请动态内存 --- 堆内存
+	str3 = new char[strlen(str1) + strlen(str2) + 1];	// new申请的堆内存是没有被初始化的,内存中的值都是随机数
+	str3[0] = '\n';
+	strcat(str3,str1);	// 不能把 st1r1的内容复制到堆内存块中，并且会导致数组越界
+	strcat(str3,str2);	// 不能把 st1r1的内容复制到堆内存块中，并且会导致数组越界
+	
+	cout << str3 << endl;	// 乱码 + 数组越界
+	return 0;
+}
+
+* 正确写法:
+* str[0] = '\0';	=> 方便strcat函数的正常调用 => 源代码即可执行
+```
+
 ## `创建单链表`
 * [创建单链表code](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list.cpp)
 * [调试结果](https://github.com/GalenDeng/C/blob/master/%E9%93%BE%E8%A1%A8/%E5%88%9B%E5%BB%BA%E5%8D%95%E9%93%BE%E8%A1%A8/create_list%E8%B0%83%E8%AF%95%E7%BB%93%E6%9E%9C)
